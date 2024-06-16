@@ -2,11 +2,9 @@ import streamlit as st
 import requests
 import json
 from uuid import uuid4
-from dotenv import load_dotenv # type: ignore
 import os
 
-# Load environment variables from a .env file
-load_dotenv()
+
 
 API_KEY = st.secrets["TRIEVE_API_KEY"]
 DATASET_ID = st.secrets["TRIEVE_DATASET_ID"]
