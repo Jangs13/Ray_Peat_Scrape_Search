@@ -1,11 +1,15 @@
 import streamlit as st
 import requests
 import json
-from datetime import datetime
 from uuid import uuid4
+from dotenv import load_dotenv # type: ignore
+import os
 
-API_KEY = 'tr-cXLsw2BU7bgBhoikpZvYipErlztAhg7A'
-DATASET_ID = 'a9a3a3df-e0c8-470f-805c-68aafbc00ced'
+# Load environment variables from a .env file
+load_dotenv()
+
+API_KEY = os.getenv('TRIEVE_API_KEY')
+DATASET_ID = os.getenv('TRIEVE_DATASET_ID')
 SEARCH_URL = 'https://api.trieve.ai/api/chunk/search'
 
 headers = {
