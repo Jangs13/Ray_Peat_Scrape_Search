@@ -4,9 +4,6 @@ import json
 from uuid import uuid4
 import os
 
-# Debugging: Print available secrets
-st.write("Available secrets:", st.secrets)
-
 # Load environment variables from Streamlit secrets
 API_KEY = st.secrets["secrets"]["TRIEVE_API_KEY"]
 DATASET_ID = st.secrets["secrets"]["TRIEVE_DATASET_ID"]
