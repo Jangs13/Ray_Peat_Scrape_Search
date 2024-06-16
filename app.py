@@ -8,8 +8,8 @@ import os
 # Load environment variables from a .env file
 load_dotenv()
 
-API_KEY = os.getenv('TRIEVE_API_KEY')
-DATASET_ID = os.getenv('TRIEVE_DATASET_ID')
+API_KEY = st.secrets('TRIEVE_API_KEY')
+DATASET_ID = st.secrets('TRIEVE_DATASET_ID')
 SEARCH_URL = 'https://api.trieve.ai/api/chunk/search'
 
 headers = {
