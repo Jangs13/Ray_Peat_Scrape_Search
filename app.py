@@ -18,7 +18,7 @@ headers = {
 def search_articles(query, page=1, page_size=10):
     data = {
         "query": query,
-        "search_type": "semantic",
+        "search_type": "hybrid",
         "highlight_results": True,
         "highlight_delimiters": ["?", ",", ".", "!"],
         "highlight_threshold": 0.5,
@@ -50,49 +50,19 @@ def display_results(results):
         st.write(f"**Description:** {description}")
         st.write("---")
 
-def display_all(results):
-    for result in results.get('score_chunks', []):
-        metadata = result.get('metadata', [])[0]
-        link = metadata.get('link')
-        
-        description = metadata.get('chunk_html')[:250] + "..."  # Displaying a part of the description
-
-        st.markdown(f"### Article Title: {get_title_from_link(link)}")
-        st.write(f"**Article Link:** [{link}]({link})")
-        st.write(f"**Description:** {description}")
-        st.write("---")
-
 def get_title_from_link(link):
     return link.split('/')[-1].replace('-', ' ').replace('.shtml', '').title()
 
 def main():
-    page = st.sidebar.selectbox("Navigation", ["Home", "Search Articles", "All Articles"])
+    st.title("Search Articles")
+    
+    with st.form(key='search_form'):
+        query = st.text_area("Enter your search query:", height=10)
+        submit_button = st.form_submit_button(label='Search')
 
-    if page == "Home":
-        st.title("W E L C O M E")
-        st.image("logo.jpg", width=200)
-        st.markdown("""
-                    :red-background[Although we removed the page for ordering books several months ago, there's still a backlog of orders, so there can be a very long delay, but the orders are still being filled.]
-        
-        This website currently reports on my research in aging, nutrition, and hormones. You will find this information in the ARTICLES section.
-        A variety of health problems are examined (eg., infertility, epilepsy, dementia, diabetes, premenstrual syndrome, arthritis, menopause), and the therapeutic uses of progesterone, pregnenolone, thyroid, and coconut oil are frequently discussed.
-
-        My approach gives priority to environmental influences on development, regenerative processes, and an evolutionary perspective. When biophysics, biochemistry, and physiology are worked into a comprehensive view of the organism, it appears that the degenerative processes are caused by defects in our environment.
-
-        As a supplement to this web site, I've also included examples of my artwork, specifically some of my paintings, which you will find in the ART GALLERY. As I've discussed in my books, I see painting as an essential part of grasping the world scientifically. For a few years, I taught art and painted portraits. I have shown my work in both the US and Mexico.
-
-        :orange[----Ray Peat] """
-        )
-    elif page == "Search Articles":
-        st.title("Search Articles")
-        query = st.text_input("Enter your search query:")
-        if st.button("Search"):
-            results = search_articles(query)
-            display_results(results)
-    elif page == "All Articles":
-        st.title("All Articles")
-        results = search_articles(query="", page_size=50)  # Fetching a broad result set
-        display_all(results)
+    if submit_button:
+        results = search_articles(query)
+        display_results(results)
 
 if __name__ == "__main__":
     main()
