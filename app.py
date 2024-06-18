@@ -3,6 +3,7 @@ import requests
 import json
 from uuid import uuid4
 import os
+from bs4 import BeautifulSoup
 
 # Load environment variables from Streamlit secrets
 API_KEY = st.secrets["secrets"]["TRIEVE_API_KEY"]
@@ -51,7 +52,19 @@ def display_results(results):
         st.write("---")
 
 def get_title_from_link(link):
-    return link.split('/')[-1].replace('-', ' ').replace('.shtml', '').title()
+    try:
+        response = requests.get(link)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            title_tag = soup.find('title')
+            if title_tag:
+                return title_tag.get_text().strip()
+            else:
+                return "No Title Found"
+        else:
+            return "Failed to Retrieve Page"
+    except Exception as e:
+        return f"Error: {str(e)}"
 
 def main():
     st.title("Search Articles")
